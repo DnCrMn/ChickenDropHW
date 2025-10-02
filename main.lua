@@ -3,6 +3,7 @@
 --game ends when animal hits bottom
 
 function love.load()
+    -- Assets
     nukeImg = love.graphics.newImage("assets/images/nuke.png")
     powerUpImg = love.graphics.newImage("assets/images/power_up.png")
     backgroundImageNormal = love.graphics.newImage("assets/images/bg_normal.png")
@@ -22,8 +23,8 @@ function love.load()
         0 - math.random(nukeImg:getHeight(), nukeImg:getHeight() * 2),
         0 - math.random(nukeImg:getHeight(), nukeImg:getHeight() * 2) }
 
-    powerUpStartX = 0
-    powerUpStartY = 0
+    powerUpStartX = 0                 -- Starting x position of the power up
+    powerUpStartY = 0                 -- Starting y position of the power up
 
     gameOver = false                  -- Game state
     enablePowerUp = false             -- Enables power up to fall from the top of the screen
@@ -56,7 +57,7 @@ function love.mousepressed(x, y, button, istouch)
 
                 -- Increase nuke speed every 15 score
                 if (score % 10 == 0 and score > 0) then
-                    nukeSpeed = nukeSpeed + 20 
+                    nukeSpeed = nukeSpeed + 20
                 end
 
                 -- Get power up every time you get 25 score
@@ -96,10 +97,12 @@ function love.update(dt)
         end
     end
 
+    -- Start timing the power up effect only when power up has been enabled
     if (enablePowerUp) then
         timePowerUp()
     end
 
+    -- Time power up appearance in screen
     if (showPowerUp) then
         powerUpTimer = love.timer.getTime() - timerStart -- Get current time in seconds
         if (powerUpTimer > powerUpLimit) then
@@ -129,8 +132,8 @@ function love.draw()
         love.graphics.draw(powerUpImg, powerUpStartX, powerUpStartY)
     end
 
-    love.graphics.setNewFont(20) -- Make text bigger
-    love.graphics.print("Score: " .. score, 670, 570)
+    love.graphics.setNewFont(20)                      -- Make text bigger
+    love.graphics.print("Score: " .. score, 670, 570) -- Output score on the bottom left of the screen
     -- Show game over text when you fail
     if (gameOver) then
         love.graphics.draw(gameOverText, 0, 0)
@@ -162,6 +165,7 @@ function resetGame()
 
     math.randomseed(os.time())
     math.random(); math.random(); math.random()
+
     startx = { math.random(0, love.graphics.getWidth() - nukeImg:getWidth()),
         math.random(0, love.graphics.getWidth() - nukeImg:getWidth()),
         math.random(0, love.graphics.getWidth() - nukeImg:getWidth()),
@@ -181,7 +185,7 @@ function powerUpPlayer()
     -- Makes the nuke drop slower
     enablePowerUp = true
     showPowerUp = false
-    previousSpeed = nukeSpeed   -- store nuke speed
+    previousSpeed = nukeSpeed -- store nuke speed
     nukeSpeed = nukeSpeed / 2 -- slightly slow down the nuke
 
     -- Start timer for how long the effect should last
@@ -196,6 +200,9 @@ function resetEffect()
     enablePowerUp = false
 end
 
+-------------------------------------------------
+--Time Power Up 
+-------------------------------------------------
 function timePowerUp()
     effectTimer = love.timer.getTime() - timerStart -- Get current time in seconds
 
